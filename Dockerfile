@@ -8,6 +8,6 @@ COPY worlds/server.properties /bukkit/
 
 WORKDIR /bukkit
 
-CMD ["/bin/bash", "java -jar craftbukkit-beta.jar --noconsole"] 
+CMD java -jar craftbukkit-beta.jar --noconsole 
 
 
