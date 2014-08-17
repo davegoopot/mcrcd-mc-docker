@@ -1,7 +1,7 @@
 FROM davegoopot/mcrcd:mcserver
 MAINTAINER dave@goopot.co.uk
 
-EXPOSE 25655
+EXPOSE 25565
 
 COPY worlds/level.dat /bukkit/world/
 COPY worlds/server.properties /bukkit/
