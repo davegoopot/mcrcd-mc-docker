@@ -2,6 +2,6 @@
 
 sudo docker build -t local:flask_latest flaskserver
 
-CONTAINER=$(sudo docker run -p 8888:5000 -d local:flask-latest)
+CONTAINER=$(sudo docker run -p 8888:5000 -d local:flask_latest)
 
-sudo docker log $CONTAINER
+sudo docker logs $CONTAINER
