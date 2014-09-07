@@ -12,10 +12,20 @@
 {% endfor %}
 </ul>
 
+<p><button type="button" onclick='make_new_file()'>New File</button></p>
+
 <h2>Script Output</h2>
 <pre style='color: white; background-color: black;width: 600px'>
 {{ output }}
 </pre>
 
+<script>
+function make_new_file() {
+    filename = prompt("Name for the new script?", "");
+    if (filename != null) {
+        window.location.assign("/edit?script=" + encodeURIComponent(filename))
+    }
+}
+</script>
     
 {% endblock body %}

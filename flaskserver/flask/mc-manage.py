@@ -1,4 +1,5 @@
 from flask import Flask, redirect, render_template, request, url_for
+import os.path
 import processrunner
 
 app = Flask(__name__)
@@ -7,9 +8,14 @@ app = Flask(__name__)
 def edit():
     to_edit = request.args['script']
     filename = "scripts/" + to_edit
-    code = ""
-    with open(filename, 'r') as f:
-        code = f.read()
+    code = """
+import mcpi.minecraft as minecraft
+ 
+world = minecraft.Minecraft.create(address='mc')    
+"""
+    if os.path.isfile(os.path.join('scripts', to_edit)):
+        with open(filename, 'r') as f:
+            code = f.read()
    
     return render_template(
         'edit.html',
