@@ -38,3 +38,19 @@ class ProcessRunnerTests(unittest.TestCase):
         command = "python -c 'print(12/0)'"
         output = processrunner.run(command)
         self.assertTrue("ZeroDivisionError" in output)
+        
+    def testListScripts(self):
+        """Return the list of available scripts"""
+        try:
+            with file('scripts/test.py','w') as f:
+                pass
+            with file('scripts/test2.py','w') as f:
+                pass
+            scripts_list = processrunner.list_scripts()
+            self.assertItemsEqual(['test.py', 'test2.py'], scripts_list)
+        finally:
+            try:
+                os.remove('scripts/test.py')
+            except OSError:
+                pass
+        

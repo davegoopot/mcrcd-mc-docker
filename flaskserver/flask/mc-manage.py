@@ -1,7 +1,6 @@
 from flask import Flask
 from flask import render_template
 from flask import request
-
 import processrunner
 
 app = Flask(__name__)
@@ -16,8 +15,17 @@ def save_file():
 
 @app.route('/run')
 def run():
-    output = processrunner.run("python -c 'print(123/0)'")
-    return render_template('run.html', output=output) 
+    scripts = processrunner.list_scripts()
+    scripts.sort()
+    to_run = request.args.get('script', '')
+    output = ""
+    if to_run:
+        command = "python scripts/" + to_run
+        output = processrunner.run(command)
+    return render_template(
+        'run.html', 
+        output=output,
+        scripts=scripts)
 
 
 if __name__ == '__main__':

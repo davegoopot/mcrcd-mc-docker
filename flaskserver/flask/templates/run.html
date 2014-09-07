@@ -5,6 +5,14 @@
 
 {% block body %}
 
+<br>
+<ul>
+{% for script in scripts %}
+    <li>{{script}} -  <a href="run?script={{script}}">RUN</a> <a href="edit?script={{script}}">EDIT</a> </li>
+{% endfor %}
+</ul>
+
+<h2>Script Output</h2>
 <pre style='color: white; background-color: black;width: 600px'>
 {{ output }}
 </pre>
