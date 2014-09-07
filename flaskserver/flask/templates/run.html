@@ -5,7 +5,8 @@
 
 {% block body %}
 
-<br>
+<h2>Available Scripts</h2>
+
 <ul>
 {% for script in scripts %}
     <li>{{script}} -  <a href="run?script={{script}}">RUN</a> <a href="edit?script={{script}}">EDIT</a> </li>
