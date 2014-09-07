@@ -28,3 +28,13 @@ class ProcessRunnerTests(unittest.TestCase):
                 os.remove('scripts/test.py')
             except OSError:
                 pass
+                
+    def testStdError(self):
+        """We should make sure the any stderr is also sent to the output"""
+        command = "echo test 1>&2"
+        (stdout, stderr) = processrunner.run(command)
+        self.assertEquals("test\n", stdout)
+        
+        command = "python -c 'print(12/0)'"
+        (stdout, stderr) = processrunner.run(command)
+        self.assertTrue("ZeroDivisionError" in stdout)

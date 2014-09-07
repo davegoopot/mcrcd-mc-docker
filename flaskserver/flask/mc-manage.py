@@ -16,7 +16,7 @@ def save_file():
 
 @app.route('/run')
 def run():
-    (stdout, stderr) = processrunner.run("python -c 'print(123*6)'")
+    (stdout, stderr) = processrunner.run("python -c 'print(123/0)'")
     return render_template('run.html', stdout=stdout) 
 
 
