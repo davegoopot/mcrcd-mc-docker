@@ -1,18 +1,36 @@
-from flask import Flask
-from flask import render_template
-from flask import request
+from flask import Flask, redirect, render_template, request, url_for
 import processrunner
 
 app = Flask(__name__)
 
-@app.route('/')
+@app.route('/edit')
 def manage():
-    return render_template('manage.html') 
+    to_edit = request.args['script']
+    filename = "scripts/" + to_edit
+    code = ""
+    with open(filename, 'r') as f:
+        code = f.read()
+   
+    return render_template(
+        'manage.html',
+        code=code,
+        script_name=to_edit)
 
-@app.route('/save-file', methods=['POST'])
+@app.route('/save', methods=['POST'])
 def save_file():
-   print("got: " + request.form['code'])
+    write_script(
+        request.form['script'],
+        request.form['code'])
+    return redirect(url_for('run'))
+        
+def write_script(name, code):
+    with open('scripts/' + name, 'w') as f:
+        f.write(code)
 
+@app.route('/')
+def root():
+    return redirect(url_for('run'))
+        
 @app.route('/run')
 def run():
     scripts = processrunner.list_scripts()
