@@ -1,2 +1,2 @@
 *.pyc
-flaskserver/flask/scripts/
+flaskserver/flask/scripts/*.py
