@@ -1,6 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+{% extends "base.html" %}
+{% block head %}
 <title>ACE in Action</title>
 <style type="text/css" media="screen">
     #editor { 
@@ -11,17 +10,14 @@
         left: 0;
     }
 </style>
-</head>
-<body>
+{% endblock head %}
 
+{% block body %}
 <div id="editor">def example():
     print('type your code here')
 }</div>
 
-<form action="save-file" method="POST">
-  <input type="submit" value="SAVE" />
-  <textarea name="code" />
-</form>
+
 
     
 <script src="http://cdnjs.cloudflare.com/ajax/libs/ace/1.1.3/ace.js" type="text/javascript" charset="utf-8"></script>
@@ -34,5 +30,6 @@
       textarea.val(editor.getSession().getValue());
 });
 </script>
-</body>
-</html>
+
+{% block body %}
+

@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block head %}
+<title>Output from Python</title>
+{% endblock head %}
+
+{% block body %}
+
+<pre style='color: white; background-color: black;width: 600px'>
+{{ stdout }}
+</pre>
+
+    
+{% endblock body %}
