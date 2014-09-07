@@ -8,8 +8,7 @@ app = Flask(__name__)
 def edit():
     to_edit = request.args['script']
     filename = "scripts/" + to_edit
-    code = """
-import mcpi.minecraft as minecraft
+    code = """import mcpi.minecraft as minecraft
  
 world = minecraft.Minecraft.create(address='mc')    
 """

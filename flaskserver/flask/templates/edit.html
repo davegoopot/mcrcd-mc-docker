@@ -29,6 +29,10 @@
     var editor = ace.edit("editor");
     editor.setTheme("ace/theme/monokai");
     editor.getSession().setMode("ace/mode/python");
+    editor.focus()
+    session = editor.getSession();
+    count = session.getLength();
+    editor.gotoLine(count, session.getLine(count-1).length);
 
     var codearea = document.getElementById('code');
     editor.getSession().on('change', function(){
