@@ -4,7 +4,7 @@ import processrunner
 app = Flask(__name__)
 
 @app.route('/edit')
-def manage():
+def edit():
     to_edit = request.args['script']
     filename = "scripts/" + to_edit
     code = ""
@@ -12,7 +12,7 @@ def manage():
         code = f.read()
    
     return render_template(
-        'manage.html',
+        'edit.html',
         code=code,
         script_name=to_edit)
 
