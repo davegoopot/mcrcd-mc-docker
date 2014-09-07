@@ -2,7 +2,7 @@ from flask import Flask
 from flask import render_template
 from flask import request
 
-from ProcessRunner import ProcessRunner
+import processrunner
 
 app = Flask(__name__)
 
@@ -16,7 +16,7 @@ def save_file():
 
 @app.route('/run')
 def run():
-    (stdout, stderr) = ProcessRunner.run("python -c 'print(123*6)'")
+    (stdout, stderr) = processrunner.run("python -c 'print(123*6)'")
     return render_template('run.html', stdout=stdout) 
 
 
