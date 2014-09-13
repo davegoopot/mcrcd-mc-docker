@@ -1,17 +1,38 @@
 {% extends "base.html" %}
 {% block head %}
-<title>Output from Python</title>
+<title>Minecraft Table Python Scripts</title>
+<style>
+table {
+    border-collapse: collapse;
+    min-width: 300px;
+}
+table, tr, th,td{
+    border: 1px solid black;
+}
+th {
+    background-color: green;
+    color: white;
+}
+</style>
 {% endblock head %}
 
 {% block body %}
 
 <h2>Available Scripts</h2>
 
-<ul>
+<table>
+    <tr>
+        <th>Script Name</th>
+        <th colspan="2">Actions</th>
+    </tr>
 {% for script in scripts %}
-    <li>{{script}} -  <a href="run?script={{script}}">RUN</a> <a href="edit?script={{script}}">EDIT</a> </li>
+    <tr>
+        <td>{{script}}</td>
+        <td><a href="run?script={{script}}">RUN</a></td>
+        <td><a href="edit?script={{script}}">EDIT</a></td>
+    </tr>
 {% endfor %}
-</ul>
+</table>
 
 <p><button type="button" onclick='make_new_file()'>New File</button></p>
 
