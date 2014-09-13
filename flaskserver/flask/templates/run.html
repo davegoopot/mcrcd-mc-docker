@@ -13,6 +13,45 @@ th {
     background-color: green;
     color: white;
 }
+
+[class*='btn-'] {
+	border-radius: 4px;
+	-webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.08);
+	-moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.08);
+	  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.08);
+	color: #fff;
+	display: inline-block;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	padding: 4px 8px;
+	text-decoration: none;
+	text-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
+	
+	-webkit-transition: background-color 0.1s linear;
+	-moz-transition: background-color 0.1s linear;
+	-o-transition: background-color 0.1s linear;
+	  transition: background-color 0.1s linear;	
+}
+
+	[class*='btn-']:hover {
+		cursor: pointer;
+	}
+	
+	.btn-green {
+		background-color: rgb( 43, 153, 91 );
+		border: 1px solid rgb( 33, 126, 74 );
+	}
+	
+	.btn-green:hover {
+			background-color: rgb( 75, 183, 141 );
+	}
+		
+	.btn-green:active {
+			background-color: rgb( 33, 126, 74 );
+	}
+
+</style>
+
 </style>
 {% endblock head %}
 
@@ -28,13 +67,13 @@ th {
 {% for script in scripts %}
     <tr>
         <td>{{script}}</td>
-        <td><a href="run?script={{script}}">RUN</a></td>
-        <td><a href="edit?script={{script}}">EDIT</a></td>
+        <td align="center"><a class="btn-green" href="run?script={{script}}">RUN</a></td>
+        <td align="center"><a class="btn-green" href="edit?script={{script}}">EDIT</a></td>
     </tr>
 {% endfor %}
 </table>
 
-<p><button type="button" onclick='make_new_file()'>New File</button></p>
+<p><button class="btn-green" type="button" onclick='make_new_file()'>Make me a new file</button></p>
 
 <h2>Script Output</h2>
 <pre style='color: white; background-color: black;width: 600px'>

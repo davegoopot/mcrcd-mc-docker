@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block head %}
-<title>ACE in Action</title>
+<title>Editing {{script_name}}</title>
 <style type="text/css" media="screen">
     #editor { 
         position: relative;
@@ -8,6 +8,43 @@
         height: 400px;
         
     }
+    
+[class*='btn-'] {
+	border-radius: 4px;
+	-webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.08);
+	-moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.08);
+	  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.08);
+	color: #fff;
+	display: inline-block;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	padding: 4px 8px;
+	text-decoration: none;
+	text-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
+	
+	-webkit-transition: background-color 0.1s linear;
+	-moz-transition: background-color 0.1s linear;
+	-o-transition: background-color 0.1s linear;
+	  transition: background-color 0.1s linear;	
+}
+
+	[class*='btn-']:hover {
+		cursor: pointer;
+	}
+	
+	.btn-green {
+		background-color: rgb( 43, 153, 91 );
+		border: 1px solid rgb( 33, 126, 74 );
+	}
+	
+	.btn-green:hover {
+			background-color: rgb( 75, 183, 141 );
+	}
+		
+	.btn-green:active {
+			background-color: rgb( 33, 126, 74 );
+	}
+    
 </style>
 {% endblock head %}
 
@@ -19,8 +56,8 @@
 <form action="save" method="POST">
 <input type="hidden" name="script" value="{{script_name}}">
 <input type="hidden" name="code" id="code" value="{{ code }}">
-<input type="submit" value="SAVE">
-<a href="/">CANCEL</a>
+<input class="btn-green" type="submit" value="SAVE">
+<a class="btn-green" href="/">CANCEL</a>
 </form>
 </div>
 
