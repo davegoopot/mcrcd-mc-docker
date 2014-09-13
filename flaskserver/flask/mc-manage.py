@@ -9,6 +9,7 @@ def edit():
     to_edit = request.args['script']
     filename = "scripts/" + to_edit
     code = """import mcpi.minecraft as minecraft
+import mcpi.block as block
  
 world = minecraft.Minecraft.create(address='mc')    
 """
