@@ -8,11 +8,11 @@ class ProcessRunnerTests(unittest.TestCase):
         """The runner should run python against a file and return the stdout contents"""
         command = "python -c 'print(2+3)'"
         output = processrunner.run(command)
-        self.assertEquals("5\n", output)
+        self.assertEquals("5\r\n", output)
         
         command = "python -c 'print(5+3)'"
         output = processrunner.run(command)
-        self.assertEquals("8\n", output)
+        self.assertEquals("8\r\n", output)
         
     def testBasicScriptsFile(self):
         """Make sure that we can run a python file from the scripts dir"""
@@ -22,7 +22,7 @@ class ProcessRunnerTests(unittest.TestCase):
             
             command = "python scripts/test.py"
             output = processrunner.run(command)
-            self.assertEquals("18\n", output)
+            self.assertEquals("18\r\n", output)
         finally:
             try:
                 os.remove('scripts/test.py')
@@ -31,9 +31,9 @@ class ProcessRunnerTests(unittest.TestCase):
                 
     def testStdError(self):
         """We should make sure the any stderr is also sent to the output"""
-        command = "echo test 1>&2"
+        command = '/bin/bash -c "echo test 1>&2"'
         output = processrunner.run(command)
-        self.assertEquals("test\n", output)
+        self.assertEquals("test\r\n", output)
         
         command = "python -c 'print(12/0)'"
         output = processrunner.run(command)
@@ -51,6 +51,7 @@ class ProcessRunnerTests(unittest.TestCase):
         finally:
             try:
                 os.remove('scripts/test.py')
+                os.remove('scripts/test2.py')
             except OSError:
                 pass
         

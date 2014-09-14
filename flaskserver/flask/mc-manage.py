@@ -45,7 +45,7 @@ def run():
     output = ""
     if to_run:
         command = "python scripts/" + to_run
-        output = processrunner.run(command)
+        output = processrunner.run(command, timeout=300)
     return render_template(
         'run.html', 
         output=output,

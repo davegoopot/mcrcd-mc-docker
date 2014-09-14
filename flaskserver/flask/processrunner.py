@@ -1,18 +1,11 @@
 import os
 import os.path
-import subprocess
+import pexpect
+import time
 
 
-def run(commandline):
-    stdout = ''
-    try:
-        output = subprocess.check_output(
-            commandline,
-            shell=True,
-            stderr=subprocess.STDOUT
-            )
-    except subprocess.CalledProcessError, ex:
-        output = ex.output
+def run(commandline, timeout=30):
+    output = pexpect.run(commandline, timeout=timeout)
         
     return output
         
