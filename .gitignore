@@ -1,2 +1,3 @@
 *.pyc
 flaskserver/flask/scripts/*.py
+.vagrant
