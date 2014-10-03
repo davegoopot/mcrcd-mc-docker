@@ -126,5 +126,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   
   config.vm.provision :shell, path: "bootstrap.sh"
   
+  #Port for Minecraft
+  config.vm.network :forwarded_port, host: 25565, guest: 25565
+  #Port for flask
+  config.vm.network :forwarded_port, host: 8888, guest: 8888
+  
+  
   
 end
