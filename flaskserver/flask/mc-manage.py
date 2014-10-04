@@ -62,7 +62,7 @@ def run():
         output=output,
         scripts=scripts)
 
-@app.route('/output/<scriptid')
+@app.route('/output/<scriptid>')
 def showoutput(scriptid):
     """
     Return the current contents of the processrunner's output dictionary for

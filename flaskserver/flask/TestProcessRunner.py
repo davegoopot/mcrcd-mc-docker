@@ -1,5 +1,6 @@
 import os
 import processrunner
+import time
 import unittest
 
 class ProcessRunnerTests(unittest.TestCase):
@@ -54,4 +55,32 @@ class ProcessRunnerTests(unittest.TestCase):
                 os.remove('scripts/test2.py')
             except OSError:
                 pass
+        
+    def testChunkedResponses(self):
+        """The output of running the process needs to be made available
+        incrementally as the process runs.
+        """
+        
+        command = "python -c 'print(\"first\n\"); from time import sleep; sleep(1);print(\"second\n\")'"
+        
+        #TODO write code for run returning only an ID
+        proc_id = processrunner.run(command)
+        
+        #TODO write code for getting process output by id
+        #initial_output = processrunner.current_output(id=proc_id)
+        
+        #self.assertEqual('first\n', initial_output)
+        time.sleep(2)
+        #final_output =  processrunner.current_output(id=proc_id)
+        
+        #self.assertEqual('first\nsecond\n', final_output)
+        
+    def testRunReturnsId(self):
+        """ When invoked the process runner run() method returns an identifer
+        for the process.  The identifier is the sha1 hexdigest() of the command
+        that was run plus the time the command is invoked as returned from the
+        time.time() command.
+        The processes as stored returned in the processrunner.output dictionary
+        """
+        self.assertEqual(0, len(processrunner.output))
         
