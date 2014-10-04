@@ -66,19 +66,15 @@ class ProcessRunnerTests(unittest.TestCase):
         incrementally as the process runs.
         """
         
-        command = "python -c 'print(\"first\n\"); from time import sleep; sleep(1);print(\"second\n\")'"
+        command = "python -c 'print(\"first\"); from time import sleep; sleep(1);print(\"second\")'"
         
-        #TODO write code for run returning only an ID
         proc_id = processrunner.run(command)
+        time.sleep(0.2)
+        self.assertEquals("first\r\n", processrunner.output[proc_id])
         
-        #TODO write code for getting process output by id
-        #initial_output = processrunner.current_output(id=proc_id)
-        
-        #self.assertEqual('first\n', initial_output)
         time.sleep(2)
-        #final_output =  processrunner.current_output(id=proc_id)
+        self.assertEquals("first\r\nsecond\r\n", processrunner.output[proc_id])
         
-        #self.assertEqual('first\nsecond\n', final_output)
         
     def testRunReturnsId(self):
         """ When invoked the process runner run() method returns an identifer
@@ -116,5 +112,3 @@ class ProcessRunnerTests(unittest.TestCase):
         id2 = processrunner.createid("test")
         self.assertNotEquals(id1, id2)
 
-            
-# TODO: Test the timeout feature with spawning            
