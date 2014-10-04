@@ -1,3 +1,8 @@
+"""
+Responsible for providing the routing from the web requests over to the
+process runner and back again.
+"""
+
 from flask import Flask, redirect, render_template, request, url_for
 import os.path
 import processrunner
@@ -39,6 +44,12 @@ def root():
         
 @app.route('/run')
 def run():
+    """
+    Handle the management of the available scripts and running processes.
+    All the available scripts are shown.
+    The parameter showoutput=ID is optional.  If passed then the output is given
+    for the pass identifier, if present.
+    """
     scripts = processrunner.list_scripts()
     scripts.sort()
     to_run = request.args.get('script', '')
@@ -51,7 +62,18 @@ def run():
         output=output,
         scripts=scripts)
 
-
+@app.route('/output/<scriptid')
+def showoutput(scriptid):
+    """
+    Return the current contents of the processrunner's output dictionary for
+    the passed scriptid.  The contents will be returned as text/plain MIME type.
+    
+    If the scriptif is not found then provide a user-friendly response, being
+    careful to sanitize the scriptid for cross-site scripting attacks.
+    """
+    pass
+        
+        
 if __name__ == '__main__':
     app.debug = True
     app.run(host='0.0.0.0', processes=20)
