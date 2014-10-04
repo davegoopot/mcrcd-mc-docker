@@ -8,12 +8,14 @@ class ProcessRunnerTests(unittest.TestCase):
     def testBasicRunFile(self):
         """The runner should run python against a file and return the stdout contents"""
         command = "python -c 'print(2+3)'"
-        output = processrunner.run(command)
-        self.assertEquals("5\r\n", output)
+        id = processrunner.run(command)
+        processrunner.wait_to_complete(id)
+        self.assertEquals("5\r\n", processrunner.output[id])
         
         command = "python -c 'print(5+3)'"
-        output = processrunner.run(command)
-        self.assertEquals("8\r\n", output)
+        id = processrunner.run(command)
+        processrunner.wait_to_complete(id)
+        self.assertEquals("8\r\n", processrunner.output[id])
         
     def testBasicScriptsFile(self):
         """Make sure that we can run a python file from the scripts dir"""
@@ -22,8 +24,9 @@ class ProcessRunnerTests(unittest.TestCase):
                 f.write('print(6*3)')
             
             command = "python scripts/test.py"
-            output = processrunner.run(command)
-            self.assertEquals("18\r\n", output)
+            id = processrunner.run(command)
+            processrunner.wait_to_complete(id)
+            self.assertEquals("18\r\n", processrunner.output[id])
         finally:
             try:
                 os.remove('scripts/test.py')
@@ -33,12 +36,14 @@ class ProcessRunnerTests(unittest.TestCase):
     def testStdError(self):
         """We should make sure the any stderr is also sent to the output"""
         command = '/bin/bash -c "echo test 1>&2"'
-        output = processrunner.run(command)
-        self.assertEquals("test\r\n", output)
+        id = processrunner.run(command)
+        processrunner.wait_to_complete(id)
+        self.assertEquals("test\r\n", processrunner.output[id])
         
         command = "python -c 'print(12/0)'"
-        output = processrunner.run(command)
-        self.assertTrue("ZeroDivisionError" in output)
+        id = processrunner.run(command)
+        processrunner.wait_to_complete(id)
+        self.assertTrue("ZeroDivisionError" in processrunner.output[id])
         
     def testListScripts(self):
         """Return the list of available scripts"""
@@ -82,5 +87,34 @@ class ProcessRunnerTests(unittest.TestCase):
         time.time() command.
         The processes as stored returned in the processrunner.output dictionary
         """
-        self.assertEqual(0, len(processrunner.output))
+        starting_output_entries = len(processrunner.output)
+        pid = processrunner.run('echo "hello"')
+        self.assertEqual(starting_output_entries+1, len(processrunner.output))
+        self.assertIn(pid, processrunner.output)
+        processrunner.wait_to_complete(pid)
+        self.assertEqual("hello\r\n", processrunner.output[pid])
         
+    def testCreateId(self):
+        """ createid generates ids based on command and time ran. Check here for
+        uniqueness.
+        """
+        self.assertEquals(
+            processrunner.createid("test", time_ran="1"),
+            processrunner.createid("test", time_ran="1"))
+            
+        self.assertNotEquals(
+            processrunner.createid("test", time_ran="1"),
+            processrunner.createid("test", time_ran="2"))
+
+        self.assertNotEquals(
+            processrunner.createid("test", time_ran="1"),
+            processrunner.createid("test2", time_ran="1"))
+
+        # If you don't pass a time_ran then take the system time.time() value
+        id1 = processrunner.createid("test")
+        time.sleep(0.1)
+        id2 = processrunner.createid("test")
+        self.assertNotEquals(id1, id2)
+
+            
+# TODO: Test the timeout feature with spawning            
