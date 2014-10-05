@@ -13,10 +13,12 @@
 <h2>Output from: {{scriptname}}</h2>
 
 <!-- TODO: Set up size and styling on the frame --> 
-<iframe id='output_frame' src='/output/{{pid}}' onload='check_reload()'></iframe> 
+<iframe id='output_frame' src='/output/{{pid}}'></iframe> 
 
-<h3>Is script still running? - ???</h3>
+<h3>Is script still running?</h3>
 
+<!--TODO: Make this look nice -->
+<div id='still_running' style='font-weight: bold; font-size: 20px'></div>
 
 <script>
 function check_reload() {
@@ -27,23 +29,39 @@ function check_reload() {
 
 function load_output() {
     // Update the output in the iframe
+    // TODO:  Change to xmlhttp to load the output and handle the race condition for the last output
+    iframe = document.getElementById('output_frame')
+    original_output = iframe.contentDocument.body.innerHTML
     if (is_process_running()) {
-        document.getElementById('output_frame').contentWindow.location.reload();
+        new_output = get_output()
+        iframe.contentDocument.body.innerHTML = new_output
+        check_reload()
         //TODO:  Move the frame to the last line
     }
+}
+
+function get_output() {
+    // load the output for this pid from the server
+    xmlhttp=new XMLHttpRequest();
+    xmlhttp.open("GET", "/output/{{pid}}", false); //false = synchronous request
+    xmlhttp.send();
+    return xmlhttp.responseText
 }
 
 function is_process_running() {
     //Query the server to ask if the pid this page is looking at is still running
     // Not going to try to support IE6 or earlier
-    // TODO:  Change to xmlhttp to load the output and handle the race condition for the last output
+
     
     xmlhttp=new XMLHttpRequest();
     xmlhttp.open("GET", "/isrunning/{{pid}}", false); //false = synchronous request
     xmlhttp.send();
+    document.getElementById('still_running').innerHTML = xmlhttp.responseText
     return (xmlhttp.responseText == 'yes')
 }
 
+// Set up the window onload function
+window.onload=check_reload
 
 </script>
 {% endblock body %}

@@ -88,9 +88,7 @@ def run(scriptname):
 def output(pid):
     """returns the text/plain output for the associated pid"""
     output = processrunner.output[pid]
-    resp = make_response(output, 200)
-    resp.mimetype = 'text/plain'
-    return resp
+    return "<pre>" + output + "\n</pre>"
         
         
 @app.route('/isrunning/<pid>')
