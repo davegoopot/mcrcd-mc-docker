@@ -1,92 +1,64 @@
 {% extends "base.html" %}
 {% block head %}
-<title>Minecraft Table Python Scripts</title>
-<style>
-table {
-    border-collapse: collapse;
-    min-width: 300px;
-}
-table, tr, th,td{
-    border: 1px solid black;
-}
-th {
-    background-color: green;
-    color: white;
-}
-
-[class*='btn-'] {
-	border-radius: 4px;
-	-webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.08);
-	-moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.08);
-	  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.08);
-	color: #fff;
-	display: inline-block;
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 14px;
-	padding: 4px 8px;
-	text-decoration: none;
-	text-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
-	
-	-webkit-transition: background-color 0.1s linear;
-	-moz-transition: background-color 0.1s linear;
-	-o-transition: background-color 0.1s linear;
-	  transition: background-color 0.1s linear;	
-}
-
-	[class*='btn-']:hover {
-		cursor: pointer;
-	}
-	
-	.btn-green {
-		background-color: rgb( 43, 153, 91 );
-		border: 1px solid rgb( 33, 126, 74 );
-	}
-	
-	.btn-green:hover {
-			background-color: rgb( 75, 183, 141 );
-	}
-		
-	.btn-green:active {
-			background-color: rgb( 33, 126, 74 );
-	}
-
-</style>
-
-</style>
+<!--  
+    Handle the running of one script.  Passed parameters are:
+        pid = the identifier of the running process
+        scriptname = the name of the file that was run
+-->
+<title>{{scriptname}} - Output</title>
 {% endblock head %}
 
 {% block body %}
 
-<h2>Available Scripts</h2>
+<h2>Output from: {{scriptname}}</h2>
 
-<table>
-    <tr>
-        <th>Script Name</th>
-        <th colspan="2">Actions</th>
-    </tr>
-{% for script in scripts %}
-    <tr>
-        <td>{{script}}</td>
-        <td align="center"><a class="btn-green" href="run?script={{script}}">RUN</a></td>
-        <td align="center"><a class="btn-green" href="edit?script={{script}}">EDIT</a></td>
-    </tr>
-{% endfor %}
-</table>
+<div id='output_div' style='width: 600px; height: 300px; color: white; background-color: black;overflow:auto;'></div> 
 
-<p><button class="btn-green" type="button" onclick='make_new_file()'>Make me a new file</button></p>
-
-<h2>Script Output</h2>
-<pre style='color: white; background-color: black;width: 600px'>
-{{ output }}
-</pre>
+<div style='font-weight: bold; font-size: 20px'>
+<span>Is script still running:  </span><span id='still_running'></span>
+</div>
 
 <script>
-function make_new_file() {
-    filename = prompt("Name for the new script?", "");
-    if (filename != null) {
-        window.location.assign("/edit?script=" + encodeURIComponent(filename))
-    }
+function check_reload() {
+    // Wait for a specified time then reload the output div
+    TIME_OUT_MILLIS = 1000
+    window.setTimeout("load_output()", TIME_OUT_MILLIS)
 }
+
+function load_output() {
+    // Update the output in the div
+    output_div = document.getElementById('output_div')
+    original_output = output_div.innerHTML
+    new_output = get_output()
+    if (is_process_running() || 
+        new_output != original_output )  //Need to check have loaded all output before stopping reloading
+        {
+            output_div.innerHTML = new_output
+            check_reload()
+            output_div.scrollTop = output_div.scrollHeight; //Display the end of the div
+    } 
+}
+
+function get_output() {
+    // load the output for this pid from the server
+    xmlhttp=new XMLHttpRequest();
+    xmlhttp.open("GET", "/output/{{pid}}", false); //false = synchronous request
+    xmlhttp.send();
+    return xmlhttp.responseText
+}
+
+function is_process_running() {
+    //Query the server to ask if the pid this page is looking at is still running
+    // Not going to try to support IE6 or earlier
+    xmlhttp=new XMLHttpRequest();
+    xmlhttp.open("GET", "/isrunning/{{pid}}", false); //false = synchronous request
+    xmlhttp.send();
+    document.getElementById('still_running').innerHTML = xmlhttp.responseText
+    return (xmlhttp.responseText == 'yes')
+}
+
+// Set up the window onload function
+window.onload=load_output
+
 </script>
-    
 {% endblock body %}

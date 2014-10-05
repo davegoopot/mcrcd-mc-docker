@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% block head %}
+<!--  
+    Handle the management of the available scripts and running processes.
+    All the available scripts are shown with options to edit or create new.
+    
+    The UI flow is:
+        1. List the available scripts
+        2. User edits and existing script or creates a new one
+        3. User clicks to run a script
+        4. Running a script opens a new browser window to show the output
+-->
+<title>Minecraft Table Python Scripts</title>
+<style>
+table {
+    border-collapse: collapse;
+    min-width: 300px;
+}
+table, tr, th,td{
+    border: 1px solid black;
+}
+th {
+    background-color: green;
+    color: white;
+}
+
+[class*='btn-'] {
+	border-radius: 4px;
+	-webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.08);
+	-moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.08);
+	  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.08);
+	color: #fff;
+	display: inline-block;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	padding: 4px 8px;
+	text-decoration: none;
+	text-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
+	
+	-webkit-transition: background-color 0.1s linear;
+	-moz-transition: background-color 0.1s linear;
+	-o-transition: background-color 0.1s linear;
+	  transition: background-color 0.1s linear;	
+}
+
+	[class*='btn-']:hover {
+		cursor: pointer;
+	}
+	
+	.btn-green {
+		background-color: rgb( 43, 153, 91 );
+		border: 1px solid rgb( 33, 126, 74 );
+	}
+	
+	.btn-green:hover {
+			background-color: rgb( 75, 183, 141 );
+	}
+		
+	.btn-green:active {
+			background-color: rgb( 33, 126, 74 );
+	}
+
+</style>
+
+</style>
+{% endblock head %}
+
+{% block body %}
+
+<h2>Available Scripts</h2>
+
+<table>
+    <tr>
+        <th>Script Name</th>
+        <th colspan="2">Actions</th>
+    </tr>
+{% for script in scripts %}
+    <tr>
+        <td>{{script}}</td>
+        <td align="center"><a class="btn-green" href="run/{{script}}" target="_blank">RUN</a></td>
+        <td align="center"><a class="btn-green" href="edit?script={{script}}">EDIT</a></td>
+    </tr>
+{% endfor %}
+</table>
+
+<p><button class="btn-green" type="button" onclick='make_new_file()'>Make me a new file</button></p>
+
+<script>
+function make_new_file() {
+    filename = prompt("Name for the new script?", "");
+    if (filename != null) {
+        window.location.assign("/edit?script=" + encodeURIComponent(filename))
+    }
+}
+</script>
+    
+{% endblock body %}

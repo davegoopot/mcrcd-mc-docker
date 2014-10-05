@@ -1,4 +1,9 @@
-from flask import Flask, redirect, render_template, request, url_for
+"""
+Responsible for providing the routing from the web requests over to the
+process runner and back again.
+"""
+
+from flask import Flask, make_response, redirect, render_template, request, url_for
 import os.path
 import processrunner
 
@@ -27,7 +32,7 @@ def save_file():
     write_script(
         request.form['script'],
         request.form['code'])
-    return redirect(url_for('run'))
+    return redirect(url_for('manage'))
         
 def write_script(name, code):
     with open('scripts/' + name, 'w') as f:
@@ -35,23 +40,63 @@ def write_script(name, code):
 
 @app.route('/')
 def root():
-    return redirect(url_for('run'))
+    return redirect(url_for('manage'))
         
-@app.route('/run')
-def run():
+@app.route('/manage')
+def manage():
+    """
+    Handle the management of the available scripts and running processes.
+    All the available scripts are shown with options to edit or create new.
+    
+    The UI flow is:
+        1. List the available scripts
+        2. User edits and existing script or creates a new one
+        3. User clicks to run a script
+        4. Running a script opens a new browser window to show the output
+    """
     scripts = processrunner.list_scripts()
     scripts.sort()
-    to_run = request.args.get('script', '')
-    output = ""
-    if to_run:
-        command = "python scripts/" + to_run
-        output = processrunner.run(command, timeout=300)
     return render_template(
-        'run.html', 
-        output=output,
+        'manage.html', 
         scripts=scripts)
 
+@app.route('/run/<scriptname>')
+def run(scriptname):
+    """
+    Run the passed scriptname and show the output incrementally.
+    The page uses javascript to periodically poll for more output.  The control
+    relies on two further URIs:
+        /output/<pid>  -- returns the text/plain output for the associated pid
+        /isrunning/<pid> -- returns 'yes' or 'no' depending on whether the pid
+                            is still active or not    
+    """
+    command = "python scripts/" + scriptname
+    pid = processrunner.run(command, timeout=300)
+    return render_template(
+        'run.html', 
+        pid=pid,
+        scriptname=scriptname)
 
+@app.route('/output/<pid>')
+def output(pid):
+    """returns the text/plain output for the associated pid"""
+    output = processrunner.output[pid]
+    return "<pre>" + output + "\n</pre>"
+        
+        
+@app.route('/isrunning/<pid>')
+def isrunning(pid):
+    """
+    returns 'yes' or 'no' depending on whether the pid is still active or not
+    """
+    if pid in processrunner.running_processes:
+        return 'yes'
+    else:
+        return 'no'
+        
+        
 if __name__ == '__main__':
     app.debug = True
-    app.run(host='0.0.0.0', processes=20)
+    # Because the processor uses a shared dictionary to store the output,
+    # we must ensure that there is only one webserver process run
+    app.run(host='0.0.0.0', processes=1)
