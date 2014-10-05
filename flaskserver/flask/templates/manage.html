@@ -1,5 +1,15 @@
 {% extends "base.html" %}
 {% block head %}
+<!--  
+    Handle the management of the available scripts and running processes.
+    All the available scripts are shown with options to edit or create new.
+    
+    The UI flow is:
+        1. List the available scripts
+        2. User edits and existing script or creates a new one
+        3. User clicks to run a script
+        4. Running a script opens a new browser window to show the output
+-->
 <title>Minecraft Table Python Scripts</title>
 <style>
 table {
@@ -67,18 +77,13 @@ th {
 {% for script in scripts %}
     <tr>
         <td>{{script}}</td>
-        <td align="center"><a class="btn-green" href="run?script={{script}}">RUN</a></td>
+        <td align="center"><a class="btn-green" href="run?script={{script}}" target="_blank">RUN</a></td>
         <td align="center"><a class="btn-green" href="edit?script={{script}}">EDIT</a></td>
     </tr>
 {% endfor %}
 </table>
 
 <p><button class="btn-green" type="button" onclick='make_new_file()'>Make me a new file</button></p>
-
-<h2>Script Output</h2>
-<pre style='color: white; background-color: black;width: 600px'>
-{{ output }}
-</pre>
 
 <script>
 function make_new_file() {
