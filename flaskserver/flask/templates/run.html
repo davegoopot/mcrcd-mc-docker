@@ -12,7 +12,7 @@
 
 <h2>Output from: {{scriptname}}</h2>
 
-<iframe id='output_frame' src='/output/{{pid}}' style='width: 600px; height: 300px'></iframe> 
+<div id='output_div' style='width: 600px; height: 300px; color: white; background-color: black;overflow:auto;'></div> 
 
 <div style='font-weight: bold; font-size: 20px'>
 <span>Is script still running:  </span><span id='still_running'></span>
@@ -20,22 +20,23 @@
 
 <script>
 function check_reload() {
-    // Wait for a specified time then reload the output iframe
+    // Wait for a specified time then reload the output div
     TIME_OUT_MILLIS = 1000
     window.setTimeout("load_output()", TIME_OUT_MILLIS)
 }
 
 function load_output() {
-    // Update the output in the iframe
-    // TODO:  Change to xmlhttp to load the output and handle the race condition for the last output
-    iframe = document.getElementById('output_frame')
-    original_output = iframe.contentDocument.body.innerHTML
-    if (is_process_running()) {
-        new_output = get_output()
-        iframe.contentDocument.body.innerHTML = new_output
-        check_reload()
-        //TODO:  Move the frame to the last line
-    }
+    // Update the output in the div
+    output_div = document.getElementById('output_div')
+    original_output = output_div.innerHTML
+    new_output = get_output()
+    if (is_process_running() || 
+        new_output != original_output )  //Need to check have loaded all output before stopping reloading
+        {
+            output_div.innerHTML = new_output
+            check_reload()
+            output_div.scrollTop = output_div.scrollHeight; //Display the end of the div
+    } 
 }
 
 function get_output() {
@@ -49,8 +50,6 @@ function get_output() {
 function is_process_running() {
     //Query the server to ask if the pid this page is looking at is still running
     // Not going to try to support IE6 or earlier
-
-    
     xmlhttp=new XMLHttpRequest();
     xmlhttp.open("GET", "/isrunning/{{pid}}", false); //false = synchronous request
     xmlhttp.send();
@@ -59,7 +58,7 @@ function is_process_running() {
 }
 
 // Set up the window onload function
-window.onload=check_reload
+window.onload=load_output
 
 </script>
 {% endblock body %}
