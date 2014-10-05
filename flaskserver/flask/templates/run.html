@@ -14,10 +14,9 @@
 
 <iframe id='output_frame' src='/output/{{pid}}' style='width: 600px; height: 300px'></iframe> 
 
-<h3>Is script still running?</h3>
-
-<!--TODO: Make this look nice -->
-<div id='still_running' style='font-weight: bold; font-size: 20px'></div>
+<div style='font-weight: bold; font-size: 20px'>
+<span>Is script still running:  </span><span id='still_running'></span>
+</div>
 
 <script>
 function check_reload() {
