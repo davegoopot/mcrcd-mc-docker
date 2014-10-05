@@ -12,8 +12,22 @@
 
 <h2>Output from: {{scriptname}}</h2>
 
-<iframe src="/output/{{pid}}"></iframe> 
+<iframe id='output_frame' src='/output/{{pid}}' onload='check_reload()'></iframe> 
 
 <h3>Is script still running? - ???</h3>
 
+
+<script>
+function check_reload() {
+    // Wait for a specified time then reload the output iframe
+    TIME_OUT_MILLIS = 1000
+    window.setTimeout("load_output()", TIME_OUT_MILLIS)
+}
+
+function load_output() {
+    // Update the output in the iframe
+    document.getElementById('output_frame').contentWindow.location.reload();
+}
+
+</script>
 {% endblock body %}

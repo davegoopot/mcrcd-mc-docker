@@ -100,7 +100,7 @@ def isrunning(scriptname):
     
     TODO
     """
-    return "DUMMY ISRUNNING"
+    return "yes" # hard coded for testing only
         
         
 if __name__ == '__main__':
