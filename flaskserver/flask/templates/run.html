@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block head %}
+<!--  
+    Handle the running of one script.  Passed parameters are:
+        pid = the identifier of the running process
+        scriptname = the name of the file that was run
+-->
+<title>{{scriptname}} - Output</title>
+{% endblock head %}
+
+{% block body %}
+
+<h2>Output from: {{scriptname}}</h2>
+
+<iframe src="/output/{{pid}}"></iframe> 
+
+<h3>Is script still running? - ???</h3>
+
+{% endblock body %}

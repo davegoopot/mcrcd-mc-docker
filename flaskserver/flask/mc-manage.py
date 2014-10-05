@@ -80,7 +80,12 @@ def run(scriptname):
     
     
     """
-    pass
+    command = "python scripts/" + scriptname
+    pid = processrunner.run(command, timeout=300)
+    return render_template(
+        'run.html', 
+        pid=pid,
+        scriptname=scriptname)
 
 @app.route('/output/<pid>')
 def output(pid):
@@ -89,7 +94,7 @@ def output(pid):
     
     TODO
     """
-    pass
+    return "DUMMY OUTPUT"
         
         
 @app.route('/isrunning/<pid>')
@@ -99,7 +104,7 @@ def isrunning(scriptname):
     
     TODO
     """
-    pass
+    return "DUMMY ISRUNNING"
         
         
 if __name__ == '__main__':
