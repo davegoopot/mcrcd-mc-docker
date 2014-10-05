@@ -3,7 +3,7 @@ Responsible for providing the routing from the web requests over to the
 process runner and back again.
 """
 
-from flask import Flask, redirect, render_template, request, url_for
+from flask import Flask, make_response, redirect, render_template, request, url_for
 import os.path
 import processrunner
 
@@ -69,9 +69,6 @@ def run(scriptname):
         /output/<pid>  -- returns the text/plain output for the associated pid
         /isrunning/<pid> -- returns 'yes' or 'no' depending on whether the pid
                             is still active or not
-    TODO:  rename run to manage and update to pop open window when running script
-    TODO:  write run method to kick off the process and return the ID
-    TODO:  write a runscript template to hold the output from the script
     TODO:  write the output method to return the output
     TODO:  write the isrunning method
     TODO:  update the javascript on the runscipt template to periodically update
@@ -89,12 +86,11 @@ def run(scriptname):
 
 @app.route('/output/<pid>')
 def output(pid):
-    """
-    returns the text/plain output for the associated pid
-    
-    TODO
-    """
-    return "DUMMY OUTPUT"
+    """returns the text/plain output for the associated pid"""
+    output = processrunner.output[pid]
+    resp = make_response(output, 200)
+    resp.mimetype = 'text/plain'
+    return resp
         
         
 @app.route('/isrunning/<pid>')
@@ -109,4 +105,6 @@ def isrunning(scriptname):
         
 if __name__ == '__main__':
     app.debug = True
-    app.run(host='0.0.0.0', processes=20)
+    # Because the processor uses a shared dictionary to store the output,
+    # we must ensure that there is only one webserver process run
+    app.run(host='0.0.0.0', processes=1)
