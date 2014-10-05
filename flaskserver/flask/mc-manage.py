@@ -32,7 +32,7 @@ def save_file():
     write_script(
         request.form['script'],
         request.form['code'])
-    return redirect(url_for('run'))
+    return redirect(url_for('manage'))
         
 def write_script(name, code):
     with open('scripts/' + name, 'w') as f:
