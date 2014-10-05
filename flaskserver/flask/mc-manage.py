@@ -68,14 +68,7 @@ def run(scriptname):
     relies on two further URIs:
         /output/<pid>  -- returns the text/plain output for the associated pid
         /isrunning/<pid> -- returns 'yes' or 'no' depending on whether the pid
-                            is still active or not
-    TODO:  write the output method to return the output
-    TODO:  write the isrunning method
-    TODO:  update the javascript on the runscipt template to periodically update
-           the output while the script is still running
-           the output while the script is still running
-    
-    
+                            is still active or not    
     """
     command = "python scripts/" + scriptname
     pid = processrunner.run(command, timeout=300)
