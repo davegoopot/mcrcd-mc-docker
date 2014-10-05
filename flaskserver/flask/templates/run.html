@@ -12,6 +12,7 @@
 
 <h2>Output from: {{scriptname}}</h2>
 
+<!-- TODO: Set up size and styling on the frame --> 
 <iframe id='output_frame' src='/output/{{pid}}' onload='check_reload()'></iframe> 
 
 <h3>Is script still running? - ???</h3>
@@ -26,8 +27,23 @@ function check_reload() {
 
 function load_output() {
     // Update the output in the iframe
-    document.getElementById('output_frame').contentWindow.location.reload();
+    if (is_process_running()) {
+        document.getElementById('output_frame').contentWindow.location.reload();
+        //TODO:  Move the frame to the last line
+    }
 }
+
+function is_process_running() {
+    //Query the server to ask if the pid this page is looking at is still running
+    // Not going to try to support IE6 or earlier
+    // TODO:  Change to xmlhttp to load the output and handle the race condition for the last output
+    
+    xmlhttp=new XMLHttpRequest();
+    xmlhttp.open("GET", "/isrunning/{{pid}}", false); //false = synchronous request
+    xmlhttp.send();
+    return (xmlhttp.responseText == 'yes')
+}
+
 
 </script>
 {% endblock body %}

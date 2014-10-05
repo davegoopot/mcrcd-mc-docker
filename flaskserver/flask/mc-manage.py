@@ -94,13 +94,14 @@ def output(pid):
         
         
 @app.route('/isrunning/<pid>')
-def isrunning(scriptname):
+def isrunning(pid):
     """
     returns 'yes' or 'no' depending on whether the pid is still active or not
-    
-    TODO
     """
-    return "yes" # hard coded for testing only
+    if pid in processrunner.running_processes:
+        return 'yes'
+    else:
+        return 'no'
         
         
 if __name__ == '__main__':
