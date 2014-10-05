@@ -83,7 +83,7 @@ def run(scriptname):
     pass
 
 @app.route('/output/<pid>')
-def run(pid):
+def output(pid):
     """
     returns the text/plain output for the associated pid
     
@@ -93,7 +93,7 @@ def run(pid):
         
         
 @app.route('/isrunning/<pid>')
-def run(scriptname):
+def isrunning(scriptname):
     """
     returns 'yes' or 'no' depending on whether the pid is still active or not
     
